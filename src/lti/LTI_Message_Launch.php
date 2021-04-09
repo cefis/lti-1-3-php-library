@@ -208,6 +208,9 @@ class LTI_Message_Launch {
     private function get_public_key() {
         $key_set_url = $this->registration->get_key_set_url();
 
+        //Allow self signed sertificates
+        $context = stream_context_create(['ssl' => [ 'verify_peer_name' => false, 'verify_peer' => false, 'allow_self_signed'=> true ] ]);
+
         // Download key set
         $public_key_set = json_decode(file_get_contents($key_set_url), true);
 
