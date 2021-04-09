@@ -13,21 +13,11 @@ class Cookie {
         return false;
     }
 
-    public function set_cookie($name, $value, $exp = 3600, $options = []) {
-        $cookie_options = [
-            'expires' => time() + $exp
-        ];
-
-        // SameSite none and secure will be required for tools to work inside iframes
-        $same_site_options = [
-            'samesite' => 'None',
-            'secure' => true
-        ];
-
-        setcookie($name, $value, array_merge($cookie_options, $same_site_options, $options));
+    public function set_cookie($name, $value, $exp = 3600) {
+        setcookie($name, $value, time() + $exp, '/; samesite=none', '', true);
 
         // Set a second fallback cookie in the event that "SameSite" is not supported
-        setcookie("LEGACY_" . $name, $value, array_merge($cookie_options, $options));
+        setcookie("LEGACY_" . $name, $value, time() + $exp);
         return $this;
     }
 }
